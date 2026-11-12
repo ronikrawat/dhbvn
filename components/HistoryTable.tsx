@@ -290,6 +290,30 @@ export default function HistoryTable({ districtId, districtName }: Props) {
             </div>
           </div>
         )}
+
+        <footer className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-neutral-800 pb-20 sm:pb-0">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 eyebrow text-neutral-600">
+            <p className="normal-case tracking-normal text-sm">
+              Data sourced from{' '}
+              <a href="https://dhbvn.org.in" target="_blank" rel="noopener noreferrer"
+                className="text-primary-400 hover:text-primary-300 transition-colors">
+                DHBVN
+              </a>
+              . Not affiliated with or endorsed by DHBVN.
+            </p>
+            <p className="normal-case tracking-normal text-sm text-neutral-500">
+              Powered by{' '}
+              <a
+                href="https://powercutstatus.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-400 hover:text-primary-300 transition-colors"
+              >
+                powercutstatus.in
+              </a>
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );

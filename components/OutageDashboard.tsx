@@ -298,7 +298,17 @@ export default function OutageDashboard({ initialDistrictId = '10' }: OutageDash
             </a>
             . Not affiliated with or endorsed by DHBVN.
           </p>
-          <p className="text-neutral-700">District Signal · Haryana</p>
+          <p className="normal-case tracking-normal text-sm text-neutral-500">
+            Powered by{' '}
+            <a
+              href="https://powercutstatus.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-400 hover:text-primary-300 transition-colors"
+            >
+              powercutstatus.in
+            </a>
+          </p>
         </div>
       </footer>
     </main>
