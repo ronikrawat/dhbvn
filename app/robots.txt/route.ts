@@ -6,7 +6,11 @@ import { SITE_URL } from '@/lib/dhbvn-config';
 //   ai-train=no  – Do NOT use content for training or fine-tuning AI models
 const contentSignalLine = 'Content-Signal: search=yes, ai-input=yes, ai-train=no';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
+  const proto = request.headers.get('x-forwarded-proto') || 'https';
+  const siteUrl = host ? `${proto}://${host}` : SITE_URL.replace(/\/+$/, '');
+
   const body = [
     '# As a condition of accessing this website, you agree to abide by the',
     '# following content signals:',
@@ -18,7 +22,7 @@ export async function GET() {
     '',
     contentSignalLine,
     '',
-    `Sitemap: ${SITE_URL}/sitemap.xml`,
+    `Sitemap: ${siteUrl}/sitemap.xml`,
     '',
   ].join('\n');
 

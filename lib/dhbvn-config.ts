@@ -1,4 +1,13 @@
-export const SITE_URL = "https://dhbvn.vercel.app" as const;
+function getSiteUrl(): string {
+  const envUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.SITE_URL ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null) ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
+  return (envUrl || "https://dhbvn.vercel.app").replace(/\/+$/, '');
+}
+
+export const SITE_URL = getSiteUrl();
 
 export const DHBVN_CONFIG = {
   FORM_ID:     "TYDUFR2Pc592nssOkzMrLQ==",
