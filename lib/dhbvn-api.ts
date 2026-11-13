@@ -115,11 +115,11 @@ async function fetchAllRawRows(district: string): Promise<DHBVNData[]> {
     for (const row of rowset) {
         const feeder = row.FEEDER?.[0] ? normalizeFeederName(row.FEEDER[0]) : undefined;
         const area = (row.AREA?.[0] || '').trim();
-        const start_time = row.START_TIME?.[0];
-        const restoration_time = row.EXPECTED_RESTORATION_TIME?.[0];
+        const start_time = (row.START_TIME?.[0] || '').trim();
+        const restoration_time = (row.EXPECTED_RESTORATION_TIME?.[0] || '').trim();
         const reason = (row.ADDRESS?.[0] || '').trim();
 
-        if (!feeder || !start_time || !restoration_time) continue;
+        if (!feeder || !start_time) continue;
 
         rows.push({ feeder, areas: [area], start_time, restoration_time, reason });
     }
@@ -169,7 +169,7 @@ export function filterActiveOutages(rows: DHBVNData[]): DHBVNData[] {
 
     for (const row of rows) {
         // skip expired outages (restoration time is in the past)
-        if (isOutageExpired(row.restoration_time)) continue;
+        if (isOutageExpired(row.restoration_time, row.start_time)) continue;
 
         const existing = feederMap.get(row.feeder);
         if (existing) {

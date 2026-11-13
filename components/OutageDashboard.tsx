@@ -101,8 +101,8 @@ export default function OutageDashboard({ initialDistrictId = '10' }: OutageDash
         row.feeder,
         row.areas.join(', '),
         row.start_time,
-        row.restoration_time,
-        row.reason,
+        row.restoration_time || 'Not specified',
+        row.reason || '—',
       ]),
       title: `${currentDistrictName} Power Outage Information`,
     });

@@ -14,8 +14,8 @@ function formatOutage(outage: DHBVNData): string {
   return `⚡ <b>${outage.feeder}</b>
 📍 Areas: ${outage.areas.join(', ')}
 🕐 Started: ${outage.start_time}
-🔧 Expected restoration: ${outage.restoration_time}
-📝 Reason: ${outage.reason}`;
+🔧 Expected restoration: ${outage.restoration_time || 'Not specified'}
+📝 Reason: ${outage.reason || 'None'}`;
 }
 
 // Format a list of outages (shared by confirmation and status messages)

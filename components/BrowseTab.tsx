@@ -346,7 +346,7 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                                 <div>
                                   <p className="eyebrow text-neutral-500">Est. Restore</p>
                                   <p className={`font-mono text-xs ${colors?.text ?? 'text-neutral-300'}`}>
-                                    {restoreDate ? format(restoreDate, 'dd-MMM HH:mm') : live.restoration_time}
+                                    {restoreDate ? format(restoreDate, 'dd-MMM HH:mm') : (live.restoration_time || 'Not specified')}
                                   </p>
                                 </div>
                               </div>
@@ -410,7 +410,7 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                           <td className="px-4 py-2.5 font-mono text-xs">
                             {live ? (() => {
                               const d = parseOutageDate(live.restoration_time);
-                              const label = d ? format(d, 'dd-MMM-yyyy HH:mm') : live.restoration_time;
+                              const label = d ? format(d, 'dd-MMM-yyyy HH:mm') : (live.restoration_time || 'Not specified');
                               return <span className={colors?.text ?? 'text-neutral-400'}>{label}</span>;
                             })() : <span className="text-neutral-600">—</span>}
                           </td>
@@ -489,7 +489,7 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                           </div>
                           <div>
                             <p className="eyebrow text-neutral-500">Est. Restore</p>
-                            <p className={`font-mono text-xs ${colors.text}`}>{restoreDate ? format(restoreDate, 'dd-MMM HH:mm') : item.restoration_time}</p>
+                            <p className={`font-mono text-xs ${colors.text}`}>{restoreDate ? format(restoreDate, 'dd-MMM HH:mm') : (item.restoration_time || 'Not specified')}</p>
                           </div>
                         </div>
                         {item.reason && <p className="mt-1.5 text-xs text-neutral-500 line-clamp-2">{item.reason}</p>}
@@ -510,7 +510,7 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                     const urgency = getUrgencyLevel(item.restoration_time);
                     const colors = getUrgencyColor(urgency);
                     const d = parseOutageDate(item.restoration_time);
-                    const label = d ? format(d, 'dd-MMM-yyyy HH:mm') : item.restoration_time;
+                    const label = d ? format(d, 'dd-MMM-yyyy HH:mm') : (item.restoration_time || 'Not specified');
                     return (
                       <tr key={`${item.feeder}-${idx}`} className="transition-colors hover:bg-neutral-800/20">
                         <td className="px-4 py-2.5">

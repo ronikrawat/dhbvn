@@ -94,7 +94,7 @@ export function createMcpServer() {
 
         const outageLines = outages.map(
           (o, i) =>
-            `${i + 1}. **${o.feeder}**\n   Areas: ${o.areas.join(', ')}\n   Start: ${o.start_time}\n   Restoration: ${o.restoration_time}\n   Reason: ${o.reason || 'Not specified'}`,
+            `${i + 1}. **${o.feeder}**\n   Areas: ${o.areas.join(', ')}\n   Start: ${o.start_time}\n   Restoration: ${o.restoration_time || 'Not specified'}\n   Reason: ${o.reason || 'Not specified'}`,
         );
 
         return {

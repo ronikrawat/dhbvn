@@ -90,7 +90,7 @@ export async function handleDhbvnGet(request: Request, format: DhbvnFormat) {
           md += `| **Feeder** | ${item.feeder} |\n`;
           md += `| **Areas Affected** | ${item.areas.join(', ')} |\n`;
           md += `| **Start Time** | ${item.start_time} |\n`;
-          md += `| **Restoration Time** | ${item.restoration_time} |\n`;
+          md += `| **Restoration Time** | ${item.restoration_time || 'Not specified'} |\n`;
           md += `| **Reason** | ${item.reason || 'N/A'} |\n\n`;
         });
       }

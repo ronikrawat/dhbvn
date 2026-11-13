@@ -8,18 +8,38 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Check if an outage restoration time (given as an IST date string e.g.
  * "16-Apr-2025 10:24:00") has passed. Returns true if the outage is expired.
+ * If restoration time is not specified by DHBVN, the outage is treated as active
+ * unless its start time is older than 48 hours.
  * This is server-timezone-independent — it explicitly converts IST → UTC epoch.
  */
-export function isOutageExpired(restorationTimeStr: string): boolean {
+export function isOutageExpired(restorationTimeStr?: string, startTimeStr?: string): boolean {
+  if (!restorationTimeStr || !restorationTimeStr.trim()) {
+    // If no restoration time is provided by DHBVN, treat as active unless start time is excessively old (>48h)
+    if (startTimeStr) {
+      const [datePart, timePart] = startTimeStr.split(' ');
+      if (datePart && timePart) {
+        const [day, month, year] = datePart.split('-');
+        const [hh, mm, ss] = timePart.split(':');
+        const monthIndex = MONTHS.indexOf(month?.toUpperCase());
+        if (monthIndex >= 0 && day && year && hh !== undefined && mm !== undefined) {
+          const istEpoch = Date.UTC(Number(year), monthIndex, Number(day), Number(hh), Number(mm), Number(ss ?? 0));
+          const startUtc = istEpoch - 330 * 60 * 1000;
+          if (Date.now() - startUtc > 48 * 60 * 60 * 1000) return true;
+        }
+      }
+    }
+    return false;
+  }
+
   const [datePart, timePart] = restorationTimeStr.split(' ');
-  if (!datePart || !timePart) return true;
+  if (!datePart || !timePart) return false;
 
   const [day, month, year] = datePart.split('-');
   const [hh, mm, ss] = timePart.split(':');
-  if (!day || !month || !year || hh === undefined || mm === undefined) return true;
+  if (!day || !month || !year || hh === undefined || mm === undefined) return false;
 
   const monthIndex = MONTHS.indexOf(month.toUpperCase());
-  if (monthIndex < 0) return true;
+  if (monthIndex < 0) return false;
 
   // Treat the parsed components as IST and convert to UTC epoch for comparison
   const istEpoch = Date.UTC(Number(year), monthIndex, Number(day), Number(hh), Number(mm), Number(ss ?? 0));
