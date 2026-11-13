@@ -40,6 +40,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'DHBVN Outage Tracker' }],
   robots: { index: true, follow: true },
   manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
   openGraph: {
     type: 'website',
     siteName: 'DHBVN Outage Tracker',

@@ -11,8 +11,8 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: '#0a1118',
     theme_color: '#0a1118',
     icons: [
-      { src: '/icon.svg', sizes: 'any', type: 'image/svg+xml' },
-      { src: '/apple-icon.svg', sizes: '180x180', type: 'image/svg+xml' },
+      { src: '/icon.png', sizes: 'any', type: 'image/png' },
+      { src: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   };
 }
