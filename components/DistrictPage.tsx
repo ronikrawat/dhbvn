@@ -19,11 +19,25 @@ export default function DistrictPage({ district }: DistrictPageProps) {
     temporal: 'Real-time, updated every 5 minutes',
     spatialCoverage: `${district.name}, Haryana, India`,
     url: canonical,
+    creator: {
+      '@type': 'Organization',
+      name: 'DHBVN Outage Tracker',
+      url: SITE_URL,
+    },
     publisher: {
       '@type': 'Organization',
       name: 'DHBVN Outage Tracker',
       url: SITE_URL,
     },
+    license: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    isAccessibleForFree: true,
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'application/json',
+        contentUrl: `${SITE_URL}/api/dhbvn?district=${district.id}`,
+      },
+    ],
   };
 
   const breadcrumbItems = isFaridabad
