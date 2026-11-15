@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { IBM_Plex_Sans, IBM_Plex_Sans_Condensed, IBM_Plex_Mono } from 'next/font/google'
 import { CustomAnalytics } from './custom-analytics'
 import { WebMCPProvider } from '@/components/WebMCPProvider'
+import { RwaShareBanner } from '@/components/RwaShareBanner'
 import { SITE_URL } from '@/lib/dhbvn-config'
 import './globals.css'
 
@@ -101,6 +102,7 @@ export default function RootLayout({
 
         {children}
 
+        <RwaShareBanner />
         <WebMCPProvider />
         <CustomAnalytics />
       </body>
