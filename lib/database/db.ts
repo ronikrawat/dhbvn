@@ -2,10 +2,11 @@ import { drizzle } from 'drizzle-orm/vercel-postgres';
 import { sql } from '@vercel/postgres';
 import * as schema from './schema';
 
-let _db: ReturnType<typeof drizzle> | null = null;
+type DrizzleDb = ReturnType<typeof drizzle<typeof schema>>;
+let _db: DrizzleDb | null = null;
 
 /** Dynamically retrieves the database handle at request runtime. Returns null if neither POSTGRES_URL nor DATABASE_URL is set. */
-export function getDb() {
+export function getDb(): DrizzleDb | null {
   const conn = process.env.POSTGRES_URL || process.env.DATABASE_URL;
   if (!conn) {
     return null;

@@ -57,9 +57,11 @@ export async function getSubscription(chatId: string): Promise<Subscription | nu
   const db = getDb();
   if (!db) return null;
 
-  const result = await db.query.telegramSubscriptions.findFirst({
-    where: eq(telegramSubscriptions.chatId, chatId),
-  });
+  const [result] = await db
+    .select()
+    .from(telegramSubscriptions)
+    .where(eq(telegramSubscriptions.chatId, chatId))
+    .limit(1);
 
   return (result as unknown as Subscription) ?? null;
 }
