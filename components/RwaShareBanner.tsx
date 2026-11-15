@@ -58,7 +58,7 @@ export function RwaShareBanner(): React.ReactElement | null {
   };
 
   const handleShare = () => {
-    const url = typeof window !== 'undefined' ? window.location.href : 'https://powercutstatus.in/';
+    const url = typeof window !== 'undefined' ? window.location.href : 'https://dhbvn.powercutstatus.in/';
     const shareText = `Check live DHBVN power cut and expected restoration times in our area here: ${url}`;
     const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
 

@@ -345,12 +345,12 @@ export default function HistoryTable({ districtId, districtName }: Props) {
             <p className="normal-case tracking-normal text-sm text-neutral-500">
               Powered by{' '}
               <a
-                href="https://powercutstatus.in/"
+                href="https://dhbvn.powercutstatus.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary-400 hover:text-primary-300 transition-colors"
               >
-                powercutstatus.in
+                dhbvn.powercutstatus.in
               </a>
             </p>
           </div>
