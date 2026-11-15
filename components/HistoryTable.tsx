@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, Database, ArrowLeft } from 'lucide-react';
+import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, Database, ArrowLeft, Clock, Activity } from 'lucide-react';
 import { routeForDistrictId } from '@/lib/district-slug';
 import { useRemoteData } from '@/lib/use-remote-data';
 import { SeoFooter } from '@/components/SeoFooter';
@@ -145,12 +145,50 @@ export default function HistoryTable({ districtId, districtName }: Props) {
           </button>
         </div>
 
+        {/* Quick Stats Strip */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+          <div className="rounded-sm board-panel p-4 flex items-center gap-3">
+            <div className="p-2.5 rounded-sm bg-primary-500/10 text-primary-400 shrink-0">
+              <Database className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="eyebrow text-neutral-500 text-[10px]">Archived Outages</p>
+              <p className="text-xl font-mono font-bold text-foreground">
+                {total === undefined ? '—' : total.toLocaleString()}
+              </p>
+            </div>
+          </div>
+          <div className="rounded-sm board-panel p-4 flex items-center gap-3">
+            <div className="p-2.5 rounded-sm bg-primary-500/10 text-primary-400 shrink-0">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="eyebrow text-neutral-500 text-[10px]">District Coverage</p>
+              <p className="text-xl font-display font-bold text-foreground">
+                {districtName}
+              </p>
+            </div>
+          </div>
+          <div className="rounded-sm board-panel p-4 flex items-center gap-3">
+            <div className="p-2.5 rounded-sm bg-success-500/10 text-success-400 shrink-0">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="eyebrow text-neutral-500 text-[10px]">Archival Sync</p>
+              <p className="text-sm font-semibold text-success-400 flex items-center gap-1.5 mt-0.5">
+                <span className="w-2 h-2 rounded-full bg-success-400 animate-pulse" />
+                Active · Every 30m
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Search + Page Size */}
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
             <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search by feeder or reason..."
+              placeholder="Search by feeder name or reason..."
               className="w-full pl-9 pr-4 py-2.5 rounded-sm bg-neutral-900/70 border border-neutral-800 text-sm text-foreground placeholder:text-neutral-500 focus:outline-none focus:border-primary-500/50" />
           </div>
           {/* Mobile sort — the card view has no sortable headers, so expose sorting here */}

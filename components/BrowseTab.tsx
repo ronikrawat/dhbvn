@@ -261,7 +261,7 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search feeder or area in your division…"
+          placeholder="Search by sector, colony, area, or feeder name…"
           className="w-full pl-9 pr-8 py-2.5 rounded-sm bg-neutral-900/70 border border-neutral-800 text-sm text-foreground placeholder:text-neutral-600 focus:outline-none focus:border-primary-500/60 focus:bg-neutral-900 transition-colors"
         />
         {isSearching && (
