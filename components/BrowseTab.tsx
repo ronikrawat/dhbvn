@@ -85,7 +85,6 @@ function FeederTableHead() {
 export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter }: Props) {
   const [fetchedCatalog, setFetchedCatalog] = useState<CatalogState>({ status: 'loading' });
   const [expandedDivisions, setExpandedDivisions] = useState<Set<string>>(new Set());
-  const [initialized, setInitialized] = useState(false);
   const [search, setSearch] = useState('');
   const [fullDivisions, setFullDivisions] = useState<Set<string>>(new Set());
   const searchRef = useRef<HTMLInputElement>(null);
@@ -103,7 +102,6 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
 
   // Fetch only the circles needed for this district, using module-level cache
   useEffect(() => {
-    setInitialized(false);
     setExpandedDivisions(new Set());
     setFullDivisions(new Set());
     setSearch('');
@@ -204,18 +202,6 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
 
     return { grouped, unmatched };
   }, [districtFeeders, getLive, liveData, search, urgencyFilter]);
-
-  // Auto-expand divisions with active outages, once per district — but only after BOTH
-  // the catalog and the live feed have settled. (The static catalog usually wins the
-  // race, and expanding before live data arrives would expand nothing.)
-  const catalogSettled = catalog.status !== 'loading';
-  useEffect(() => {
-    if (initialized || !liveReady || !catalogSettled) return;
-    const withActive = grouped.filter(g => g.activeCount > 0).map(g => g.division);
-    if (unmatched.length > 0) withActive.push('__unmatched__');
-    setExpandedDivisions(new Set(withActive));
-    setInitialized(true);
-  }, [grouped, unmatched, initialized, liveReady, catalogSettled]);
 
   const toggleDivision = (division: string) => {
     setExpandedDivisions(prev => {
