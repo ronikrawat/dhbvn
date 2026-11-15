@@ -304,12 +304,12 @@ export default function OutageDashboard({ initialDistrictId = '10' }: OutageDash
           <p className="normal-case tracking-normal text-sm text-neutral-500">
             Powered by{' '}
             <a
-              href="https://dhbvn.powercutstatus.in/"
+              href="https://powercutstatus.in/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-400 hover:text-primary-300 transition-colors"
             >
-              dhbvn.powercutstatus.in
+              powercutstatus.in
             </a>
           </p>
         </div>
