@@ -25,6 +25,11 @@ export function SeoFooter({ currentDistrictName }: SeoFooterProps) {
         'You can register an electricity complaint with DHBVN by calling their 24x7 toll-free helpline at 1912 or 1800-180-4334. You can also send an SMS or register via the official DHBVN portal.',
     },
     {
+      question: 'Why does Expected Restoration Time show "Not specified"?',
+      answer:
+        'In electricity distribution companies (DISCOMs) like DHBVN, outages fall into two categories: 1) Planned Maintenance / Shutdowns: DHBVN announces these in advance (e.g. transformer upgrades or line maintenance from 10:00 AM to 2:00 PM), and operators enter a specific restoration time. 2) Unscheduled Tripping / Breakdowns (most common): When a feeder trips due to a cable fault, storm, overload, or equipment breakdown, the substation breaker trips and DHBVN logs the Start Time automatically. Because linemen must first patrol the physical line to locate and repair the fault, DHBVN operators do not enter an estimated restoration time and leave it blank until power is restored.',
+    },
+    {
       question: 'What is the difference between scheduled maintenance and breakdown?',
       answer:
         'Scheduled outages are planned shutdowns announced in advance for tree trimming, transformer upgrades, or grid maintenance. Unscheduled breakdowns occur due to unexpected cable faults, tripping, weather damage, or equipment failure.',
