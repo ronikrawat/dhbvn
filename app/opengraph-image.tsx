@@ -1,6 +1,5 @@
 import { ImageResponse } from 'next/og';
 
-export const runtime = 'edge';
 export const alt = 'Faridabad Power Outage Tracker — Live DHBVN Updates';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';

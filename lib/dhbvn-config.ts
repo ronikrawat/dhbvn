@@ -4,7 +4,7 @@ function getSiteUrl(): string {
     process.env.SITE_URL ||
     (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null) ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null);
-  return (envUrl || "https://dhbvn.vercel.app").replace(/\/+$/, '');
+  return (envUrl || "https://powercutstatus.in").replace(/\/+$/, '');
 }
 
 export const SITE_URL = getSiteUrl();

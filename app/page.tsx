@@ -4,21 +4,21 @@ import { SITE_URL } from '@/lib/dhbvn-config';
 import { districtFromId, FARIDABAD_ID } from '@/lib/district-slug';
 
 export const metadata: Metadata = {
-  title: 'Faridabad Power Outage Tracker — Live DHBVN Updates',
+  title: 'DHBVN Power Outage Tracker — Live Haryana Power Cut Status',
   description:
-    'Real-time power outage info for Faridabad: affected feeders, areas, start times, expected restoration. Live data from DHBVN, updated every 5 minutes.',
+    'Real-time DHBVN power outage tracker for Haryana: live feeder status, affected areas, start times, and expected restoration in Faridabad, Gurugram, Hisar & all districts. Updated every 5 minutes.',
   alternates: { canonical: `${SITE_URL}/` },
   openGraph: {
     type: 'website',
     url: `${SITE_URL}/`,
-    title: 'Faridabad Power Outage Tracker — Live DHBVN Updates',
+    title: 'DHBVN Power Outage Tracker — Live Haryana Power Cut Status',
     description:
-      'Real-time power outage info for Faridabad: affected feeders, areas, start times, expected restoration. Live data from DHBVN, updated every 5 minutes.',
+      'Real-time DHBVN power outage tracker for Haryana: live feeder status, affected areas, start times, and expected restoration in Faridabad, Gurugram, Hisar & all districts. Updated every 5 minutes.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Faridabad Power Outage Tracker — Live DHBVN Updates',
-    description: 'Real-time power outage updates for Faridabad, Haryana.',
+    title: 'DHBVN Power Outage Tracker — Live Haryana Power Cut Status',
+    description: 'Real-time DHBVN power outage tracker for Haryana: live feeder status, affected areas, and restoration times.',
   },
 };
 

@@ -38,8 +38,38 @@ export const metadata: Metadata = {
   },
   description:
     'Real-time power outage tracker for Haryana districts served by DHBVN. Affected feeders, areas, start times, and expected restoration — updated every 5 minutes.',
-  authors: [{ name: 'DHBVN Outage Tracker' }],
-  robots: { index: true, follow: true },
+  keywords: [
+    'DHBVN power cut',
+    'DHBVN power outage tracker',
+    'Haryana electricity cut',
+    'power cut status Haryana',
+    'DHBVN light kab aayegi',
+    'Faridabad power cut',
+    'Gurgaon power cut',
+    'Gurugram electricity outage',
+    'Hisar power cut',
+    'Rohtak power outage',
+    'DHBVN feeder status',
+    'Dakshin Haryana Bijli Vitran Nigam',
+  ],
+  authors: [{ name: 'DHBVN Outage Tracker', url: SITE_URL }],
+  creator: 'DHBVN Outage Tracker',
+  publisher: 'DHBVN Outage Tracker',
+  category: 'Utilities',
+  formatDetection: {
+    telephone: false,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   manifest: '/manifest.webmanifest',
   icons: {
     icon: [
@@ -53,9 +83,21 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'DHBVN Outage Tracker',
     locale: 'en_IN',
+    url: SITE_URL,
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'DHBVN Power Outage Tracker — Live Haryana Status',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'DHBVN Power Outage Tracker — Haryana Live Updates',
+    description: 'Real-time power outage tracker for Haryana districts served by DHBVN.',
+    images: [`${SITE_URL}/opengraph-image`],
   },
 }
 
@@ -71,6 +113,9 @@ const siteSchema = [
     '@type': 'Organization',
     name: 'DHBVN Outage Tracker',
     url: SITE_URL,
+    logo: `${SITE_URL}/icon.png`,
+    description:
+      'Community power outage tracker providing real-time DHBVN feeder status and expected restoration times across Haryana districts.',
     sameAs: ['https://dhbvn.org.in'],
   },
   {
@@ -78,6 +123,8 @@ const siteSchema = [
     '@type': 'WebSite',
     name: 'DHBVN Outage Tracker',
     url: SITE_URL,
+    description:
+      'Track real-time electricity outages, feeder shutdowns, and power cut schedules in Haryana districts served by DHBVN.',
   },
 ]
 

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { PulseDot } from '@/components/ui/PulseDot';
 import { routeForDistrictId } from '@/lib/district-slug';
 import { useRemoteData } from '@/lib/use-remote-data';
+import { SeoFooter } from '@/components/SeoFooter';
 
 const FEED_REFRESH_MS = 5 * 60 * 1000;
 const NO_OUTAGES: DHBVNData[] = [];
@@ -287,6 +288,8 @@ export default function OutageDashboard({ initialDistrictId = '10' }: OutageDash
           />
         </div>
       )}
+
+      <SeoFooter currentDistrictName={currentDistrictName} />
 
       <footer className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-neutral-800 pb-20 sm:pb-0">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 eyebrow text-neutral-600">

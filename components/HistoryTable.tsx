@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Search, Download, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, Database, ArrowLeft } from 'lucide-react';
 import { routeForDistrictId } from '@/lib/district-slug';
 import { useRemoteData } from '@/lib/use-remote-data';
+import { SeoFooter } from '@/components/SeoFooter';
 
 interface HistoryRow {
   id: number;
@@ -290,6 +291,8 @@ export default function HistoryTable({ districtId, districtName }: Props) {
             </div>
           </div>
         )}
+
+        <SeoFooter currentDistrictName={districtName} />
 
         <footer className="mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-neutral-800 pb-20 sm:pb-0">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 eyebrow text-neutral-600">
