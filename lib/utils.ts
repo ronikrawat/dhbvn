@@ -132,3 +132,61 @@ export function getUrgencyColor(urgency: UrgencyLevel): { text: string; bg: stri
       };
   }
 }
+
+/**
+ * Normalizes text for search comparison:
+ * - Lowercases and trims
+ * - Replaces hyphens, underscores, slashes, dots with spaces
+ * - Expands common abbreviations: "sec" -> "sector", "ph" -> "phase"
+ * - Collapses consecutive whitespace
+ */
+export function normalizeSearchText(str: string): string {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .replace(/[\-_/.,]+/g, ' ')
+    .replace(/\bsec\b/g, 'sector')
+    .replace(/\bph\b/g, 'phase')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Checks if a target string matches a search query with fuzzy separator & abbreviation tolerance.
+ * Supports:
+ * - "sector 62" matching "sector-62", "sec-62", "sec 62", "sector_62"
+ * - "sec 62" matching "sector-62"
+ * - Compressed matches without spaces (e.g. "sector62" matches "sector 62")
+ * - Multi-word token matching (all query words present in target)
+ */
+export function matchesSearch(target: string, query: string): boolean {
+  if (!query || !query.trim()) return true;
+  if (!target) return false;
+
+  const rawTarget = target.toLowerCase();
+  const rawQuery = query.toLowerCase().trim();
+
+  // 1. Direct substring match
+  if (rawTarget.includes(rawQuery)) return true;
+
+  // 2. Normalized separator & abbreviation match (e.g. "sector 62" vs "sector-62" vs "sec-62")
+  const normTarget = normalizeSearchText(target);
+  const normQuery = normalizeSearchText(query);
+  if (normTarget.includes(normQuery)) return true;
+
+  // 3. Compact match (ignoring all spaces: "sector62" == "sector-62")
+  const compactTarget = normTarget.replace(/\s+/g, '');
+  const compactQuery = normQuery.replace(/\s+/g, '');
+  if (compactTarget.includes(compactQuery)) return true;
+
+  // 4. Token-based match: every word in the query must be found in target
+  const queryTokens = normQuery.split(/\s+/).filter(Boolean);
+  if (queryTokens.length > 1) {
+    const allTokensMatch = queryTokens.every(token =>
+      normTarget.includes(token) || compactTarget.includes(token)
+    );
+    if (allTokensMatch) return true;
+  }
+
+  return false;
+}

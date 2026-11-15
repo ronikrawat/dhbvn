@@ -5,7 +5,7 @@ import { ChevronDown, ChevronRight, Search, X } from 'lucide-react';
 import { DHBVNData } from '@/lib/dhbvn-api';
 import { DISTRICTS } from '@/lib/district';
 import { format } from 'date-fns';
-import { normalizeFeederName, stripFeederSuffix, getUrgencyLevel, getUrgencyColor, parseOutageDate, UrgencyLevel } from '@/lib/utils';
+import { normalizeFeederName, stripFeederSuffix, getUrgencyLevel, getUrgencyColor, parseOutageDate, UrgencyLevel, matchesSearch } from '@/lib/utils';
 import { PulseDot } from '@/components/ui/PulseDot';
 
 interface FeederEntry {
@@ -166,8 +166,8 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
       if (live) matchedKeys.add(normalizeFeederName(live.feeder));
 
       if (q) {
-        const matchesFeeder = f.feeder_name.toLowerCase().includes(q);
-        const matchesArea = live?.areas.some(a => a.toLowerCase().includes(q)) ?? false;
+        const matchesFeeder = matchesSearch(f.feeder_name, q);
+        const matchesArea = live?.areas.some(a => matchesSearch(a, q)) ?? false;
         if (!matchesFeeder && !matchesArea) continue;
       }
 
@@ -196,8 +196,8 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
     const unmatched = liveData.filter(item => {
       if (matchedKeys.has(normalizeFeederName(item.feeder))) return false;
       if (q) {
-        return item.feeder.toLowerCase().includes(q) ||
-          item.areas.some(a => a.toLowerCase().includes(q));
+        return matchesSearch(item.feeder, q) ||
+          item.areas.some(a => matchesSearch(a, q));
       }
       return true;
     });

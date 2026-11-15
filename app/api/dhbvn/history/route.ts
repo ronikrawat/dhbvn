@@ -49,12 +49,38 @@ export async function GET(request: NextRequest) {
   const conditions: SQL[] = [eq(outageHistory.districtId, districtId)];
 
   if (search) {
-    conditions.push(
-      or(
-        ilike(outageHistory.feeder, `%${search}%`),
-        ilike(outageHistory.reason, `%${search}%`),
-      )!
-    );
+    const terms = [search];
+    // If search has spaces, also search with hyphens and wildcards
+    if (search.includes(' ')) {
+      terms.push(search.replace(/\s+/g, '-'));
+      terms.push(search.replace(/\s+/g, '%'));
+    }
+    // If search has hyphens, also search with spaces and wildcards
+    if (search.includes('-')) {
+      terms.push(search.replace(/-/g, ' '));
+      terms.push(search.replace(/-/g, '%'));
+    }
+    // Handle sec <-> sector
+    const sectorExpanded = search.replace(/\bsec\b/gi, 'sector');
+    if (sectorExpanded !== search) {
+      terms.push(sectorExpanded);
+      terms.push(sectorExpanded.replace(/\s+/g, '-'));
+      terms.push(sectorExpanded.replace(/\s+/g, '%'));
+    }
+    const secShortened = search.replace(/\bsector\b/gi, 'sec');
+    if (secShortened !== search) {
+      terms.push(secShortened);
+      terms.push(secShortened.replace(/\s+/g, '-'));
+      terms.push(secShortened.replace(/\s+/g, '%'));
+    }
+
+    const uniqueTerms = Array.from(new Set(terms));
+    const searchConditions = uniqueTerms.flatMap(term => [
+      ilike(outageHistory.feeder, `%${term}%`),
+      ilike(outageHistory.reason, `%${term}%`),
+    ]);
+
+    conditions.push(or(...searchConditions)!);
   }
 
   const whereClause = and(...conditions);
