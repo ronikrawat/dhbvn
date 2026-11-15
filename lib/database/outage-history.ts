@@ -2,7 +2,7 @@
 // Each row is deduped by (district_id, feeder, start_time) via unique index.
 
 import type { DHBVNData } from '../dhbvn-api';
-import { db } from './db';
+import { getDb } from './db';
 import { outageHistory } from './schema';
 
 /**
@@ -19,6 +19,7 @@ export async function saveOutageBatch(
   rows: DHBVNData[]
 ): Promise<number> {
   if (rows.length === 0) return 0;
+  const db = getDb();
   if (!db) return 0;
 
   try {

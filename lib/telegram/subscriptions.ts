@@ -1,7 +1,7 @@
 // Database operations for Telegram subscriptions
 
 import { eq, sql } from 'drizzle-orm';
-import { db } from '../database/db';
+import { getDb } from '../database/db';
 import { telegramSubscriptions } from '../database/schema';
 import { getDistrictName } from '../district';
 
@@ -24,6 +24,7 @@ export async function upsertSubscription(
   districtId: number,
   username?: string
 ): Promise<Subscription> {
+  const db = getDb();
   if (!db) throw new Error('Database not configured (POSTGRES_URL missing)');
 
   const districtName = getDistrictName(districtId);
@@ -53,6 +54,7 @@ export async function upsertSubscription(
 
 // Get subscription by chat ID
 export async function getSubscription(chatId: string): Promise<Subscription | null> {
+  const db = getDb();
   if (!db) return null;
 
   const result = await db.query.telegramSubscriptions.findFirst({
@@ -64,6 +66,7 @@ export async function getSubscription(chatId: string): Promise<Subscription | nu
 
 // Unsubscribe a user
 export async function unsubscribe(chatId: string): Promise<boolean> {
+  const db = getDb();
   if (!db) return false;
 
   const [result] = await db.update(telegramSubscriptions)

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/database/db';
+import { getDb } from '@/lib/database/db';
 import { outageHistory } from '@/lib/database/schema';
 import { eq, or, and, ilike, sql, desc, asc, SQL } from 'drizzle-orm';
 
@@ -29,6 +29,7 @@ function isTableMissingError(err: unknown): boolean {
 }
 
 export async function GET(request: NextRequest) {
+  const db = getDb();
   if (!db) {
     return NextResponse.json({ error: 'Database not configured' }, { status: 503 });
   }
