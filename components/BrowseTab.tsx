@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { ChevronDown, ChevronRight, Search, X } from 'lucide-react';
+import { ChevronDown, ChevronRight, Search, X, Share2 } from 'lucide-react';
 import { DHBVNData } from '@/lib/dhbvn-api';
-import { DISTRICTS } from '@/lib/district';
+import { DISTRICTS, getDistrictName } from '@/lib/district';
+import { routeForDistrictId } from '@/lib/district-slug';
 import { format } from 'date-fns';
 import { normalizeFeederName, stripFeederSuffix, getUrgencyLevel, getUrgencyColor, parseOutageDate, UrgencyLevel, matchesSearch } from '@/lib/utils';
 import { PulseDot } from '@/components/ui/PulseDot';
@@ -82,12 +83,30 @@ function FeederTableHead() {
   );
 }
 
+function getWhatsAppShareUrl(
+  feeder: string,
+  areas: string[],
+  startTime: string,
+  restorationTime: string | undefined,
+  districtId: number,
+  districtName: string
+): string {
+  const route = routeForDistrictId(districtId);
+  const fullUrl = `https://dhbvn.powercutstatus.in${route}`;
+  const areaText = areas && areas.length > 0 ? areas.join(', ') : 'Reported areas';
+  const restoreText = restorationTime && restorationTime.trim() ? restorationTime : 'Pending inspection';
+  const text = `⚡ DHBVN Outage Alert\n📍 Feeder: ${feeder} (${districtName})\n🏙️ Areas: ${areaText}\n⏰ Started: ${startTime}\n⏳ Est. Restoration: ${restoreText}\n🔗 Check live updates: ${fullUrl}`;
+  return `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+}
+
 export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter }: Props) {
   const [fetchedCatalog, setFetchedCatalog] = useState<CatalogState>({ status: 'loading' });
   const [expandedDivisions, setExpandedDivisions] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState('');
   const [fullDivisions, setFullDivisions] = useState<Set<string>>(new Set());
   const searchRef = useRef<HTMLInputElement>(null);
+
+  const currentDistrictName = useMemo(() => getDistrictName(Number(selectedDistrict)), [selectedDistrict]);
 
   const districtCircles = useMemo(() => {
     const district = DISTRICTS.find(d => String(d.id) === selectedDistrict);
@@ -240,24 +259,26 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
       )}
 
       {/* Search box */}
-      <div className="relative group">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 group-focus-within:text-primary-500 transition-colors pointer-events-none" />
-        <input
-          ref={searchRef}
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search by sector, colony, area, or feeder name…"
-          className="w-full pl-9 pr-8 py-2.5 rounded-sm bg-neutral-900/70 border border-neutral-800 text-sm text-foreground placeholder:text-neutral-600 focus:outline-none focus:border-primary-500/60 focus:bg-neutral-900 transition-colors"
-        />
-        {isSearching && (
-          <button
-            onClick={() => { setSearch(''); searchRef.current?.focus(); }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-primary-400 transition-colors"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
-        )}
+      <div className="sticky top-2 z-20 backdrop-blur-md bg-neutral-950/85 py-1">
+        <div className="relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500 group-focus-within:text-primary-500 transition-colors pointer-events-none" />
+          <input
+            ref={searchRef}
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search by sector, colony, area, or feeder name…"
+            className="w-full pl-9 pr-8 py-2.5 rounded-sm bg-neutral-900/90 border border-neutral-800 text-sm text-foreground placeholder:text-neutral-600 focus:outline-none focus:border-primary-500/60 focus:bg-neutral-900 transition-colors shadow-lg"
+          />
+          {isSearching && (
+            <button
+              onClick={() => { setSearch(''); searchRef.current?.focus(); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-primary-400 transition-colors"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {isSearching && grouped.length === 0 && (
@@ -307,12 +328,26 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                       <div className="flex items-start gap-2.5 min-w-0">
                         <span className={`mt-1.5 flex-shrink-0 w-2 h-2 rounded-full ${live ? (colors?.dot ?? 'bg-error-500') : 'bg-neutral-700'}`} />
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm text-foreground font-mono">
-                            {f.feeder_name}
-                            {isAmbig && (
-                              <span className="text-xs text-neutral-500 ml-1.5">· {f.ss_name}</span>
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="text-sm text-foreground font-mono">
+                              {f.feeder_name}
+                              {isAmbig && (
+                                <span className="text-xs text-neutral-500 ml-1.5">· {f.ss_name}</span>
+                              )}
+                            </p>
+                            {live && (
+                              <a
+                                href={getWhatsAppShareUrl(f.feeder_name, live.areas, live.start_time, live.restoration_time, Number(selectedDistrict), currentDistrictName)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-2 py-0.5 rounded transition-colors shrink-0"
+                                title="Share outage status on WhatsApp"
+                              >
+                                <Share2 className="w-3 h-3" />
+                                <span>Share</span>
+                              </a>
                             )}
-                          </p>
+                          </div>
                           {live && (
                             <>
                               <div className="flex flex-wrap gap-1 mt-1">
@@ -400,8 +435,22 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                               return <span className={colors?.text ?? 'text-neutral-400'}>{label}</span>;
                             })() : <span className="text-neutral-600">—</span>}
                           </td>
-                          <td className="px-4 py-2.5 text-neutral-400 text-xs max-w-[200px] truncate">
-                            {live?.reason || <span className="text-neutral-600">—</span>}
+                          <td className="px-4 py-2.5 text-neutral-400 text-xs max-w-[240px]">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="truncate">{live?.reason || '—'}</span>
+                              {live && (
+                                <a
+                                  href={getWhatsAppShareUrl(f.feeder_name, live.areas, live.start_time, live.restoration_time, Number(selectedDistrict), currentDistrictName)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 px-1.5 py-0.5 rounded transition-colors shrink-0"
+                                  title="Share outage status on WhatsApp"
+                                >
+                                  <Share2 className="w-3 h-3" />
+                                  <span>Share</span>
+                                </a>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       );
@@ -462,7 +511,19 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                     <div className="flex items-start gap-2.5 min-w-0">
                       <span className={`mt-1.5 flex-shrink-0 w-2 h-2 rounded-full ${colors.dot}`} />
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm text-foreground font-mono">{item.feeder}</p>
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-sm text-foreground font-mono">{item.feeder}</p>
+                          <a
+                            href={getWhatsAppShareUrl(item.feeder, item.areas, item.start_time, item.restoration_time, Number(selectedDistrict), currentDistrictName)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 px-2 py-0.5 rounded transition-colors shrink-0"
+                            title="Share outage status on WhatsApp"
+                          >
+                            <Share2 className="w-3 h-3" />
+                            <span>Share</span>
+                          </a>
+                        </div>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {item.areas.map(area => (
                             <span key={area} className="font-mono text-[11px] text-neutral-300 bg-neutral-800/70 border border-neutral-800 px-1.5 py-0.5 rounded-sm">{area}</span>
@@ -514,7 +575,21 @@ export function BrowseTab({ liveData, liveReady, selectedDistrict, urgencyFilter
                         </td>
                         <td className="px-4 py-2.5 text-neutral-400 font-mono text-xs">{item.start_time}</td>
                         <td className="px-4 py-2.5 font-mono text-xs"><span className={colors.text}>{label}</span></td>
-                        <td className="px-4 py-2.5 text-neutral-400 text-xs max-w-[200px] truncate">{item.reason || '—'}</td>
+                        <td className="px-4 py-2.5 text-neutral-400 text-xs max-w-[240px]">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="truncate">{item.reason || '—'}</span>
+                            <a
+                              href={getWhatsAppShareUrl(item.feeder, item.areas, item.start_time, item.restoration_time, Number(selectedDistrict), currentDistrictName)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 px-1.5 py-0.5 rounded transition-colors shrink-0"
+                              title="Share outage status on WhatsApp"
+                            >
+                              <Share2 className="w-3 h-3" />
+                              <span>Share</span>
+                            </a>
+                          </div>
+                        </td>
                       </tr>
                     );
                   })}

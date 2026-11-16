@@ -255,6 +255,22 @@ export default function OutageDashboard({ initialDistrictId = '10' }: OutageDash
               />
             </div>
           )}
+
+          {feederCount === 0 && !loading && !error && (
+            <div className="mt-5 p-4 rounded-sm board-panel border border-emerald-500/30 bg-emerald-950/15 flex items-start sm:items-center gap-3.5">
+              <div className="p-2 rounded-full bg-emerald-500/10 text-emerald-400 shrink-0">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-emerald-300 font-display">
+                  All Monitored Feeders Operational in {currentDistrictName}
+                </p>
+                <p className="text-xs text-neutral-400 mt-0.5 leading-relaxed">
+                  DHBVN operational logs report zero active 11kV/33kV feeder breakdowns in {currentDistrictName} right now. If your specific building or street has an outage, it may be a local transformer fuse or service cable issue — call DHBVN 24x7 toll-free at <a href="tel:1912" className="text-primary-400 underline font-mono">1912</a>.
+                </p>
+              </div>
+            </div>
+          )}
         </header>
 
         {error && (

@@ -53,6 +53,37 @@ export default function DistrictPage({ district }: DistrictPageProps) {
     itemListElement: breadcrumbItems,
   };
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `How do I check live power cut status in ${district.name} today?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `You can check live power cuts, affected areas, and feeder restoration times in ${district.name} on this dashboard. Data updates directly from DHBVN operational logs every 5 minutes.`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: `What is the DHBVN power cut complaint number for ${district.name}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `For ${district.name}, you can register an electricity complaint with DHBVN 24x7 toll-free at 1912 or 1800-180-4334, or send an SMS with your 10-digit account ID to 9212340005.`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: `Why is the restoration time blank or not specified for my area in ${district.name}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `In DHBVN distribution, unscheduled tripping caused by cable faults, transformer breakdowns, or weather events requires physical line patrolling. Operators leave the estimated time blank until linemen locate and resolve the fault.`,
+        },
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -62,6 +93,10 @@ export default function DistrictPage({ district }: DistrictPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <OutageDashboardLoader initialDistrictId={String(district.id)} />
