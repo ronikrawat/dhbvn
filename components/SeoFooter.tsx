@@ -37,7 +37,7 @@ export function SeoFooter({ currentDistrictName }: SeoFooterProps) {
     {
       question: 'Which districts in Haryana are covered by DHBVN?',
       answer:
-        'DHBVN (Dakshin Haryana Bijli Vitran Nigam) manages electricity distribution across southern and western Haryana districts, including Faridabad, Gurugram, Hisar, Rohtak, Bhiwani, Sirsa, Jind, Fatehabad, Rewari, Palwal, Nuh, and Charkhi Dadri.',
+        'DHBVN (Dakshin Haryana Bijli Vitran Nigam) manages electricity distribution across southern and western Haryana districts, including Faridabad, Gurugram, Hisar, Bhiwani, Sirsa, Jind, Fatehabad, Rewari, Palwal, Nuh, Mahendargarh (Narnaul), and Charkhi Dadri.',
     },
   ];
 

@@ -64,10 +64,6 @@ export default function DistrictPage({ district }: DistrictPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <h1 className="sr-only">
-        {district.name} Power Outages — Live DHBVN Updates
-      </h1>
-
       <OutageDashboardLoader initialDistrictId={String(district.id)} />
     </>
   );

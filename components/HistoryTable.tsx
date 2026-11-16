@@ -253,7 +253,7 @@ export default function HistoryTable({ districtId, districtName }: Props) {
               ) : rows.map(row => (
                 <tr key={row.id} className="hover:bg-primary-500/[0.04] transition-colors">
                   <td className={tdClass + ' font-mono text-[13px]'}>{row.feeder}</td>
-                                  <td className={tdClass + ' whitespace-nowrap font-mono text-xs'}>{row.startTime}</td>
+                  <td className={tdClass + ' whitespace-nowrap font-mono text-xs'}>{row.startTime}</td>
                   <td className={tdClass + ' whitespace-nowrap font-mono text-xs'}>{row.restorationTime}</td>
                   <td className={tdClass + ' max-w-xs truncate text-neutral-400 text-xs'} title={row.reason}>{row.reason}</td>
                   <td className={tdClass + ' whitespace-nowrap font-mono text-xs text-neutral-500'}>{row.createdAt ? new Date(row.createdAt).toLocaleDateString('en-IN') : '—'}</td>

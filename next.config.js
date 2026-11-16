@@ -2,6 +2,15 @@
 const nextConfig = {
   output: 'standalone',
   reactCompiler: true,
+  async redirects() {
+    return [
+      {
+        source: '/rohtak',
+        destination: '/',
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     return [
       // Rewrites for .well-known paths (Next.js dot-prefixed route workaround)

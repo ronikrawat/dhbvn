@@ -187,9 +187,9 @@ export default function OutageDashboard({ initialDistrictId = '10' }: OutageDash
           {/* Marquee — district name as a board headline */}
           <div className="flex items-end gap-2">
             <MapPin className="w-6 h-6 lg:w-7 lg:h-7 text-neutral-600 mb-1.5 lg:mb-2 shrink-0" />
-            <div className="text-4xl lg:text-5xl font-display font-bold tracking-tight leading-none">
+            <h1 className="text-4xl lg:text-5xl font-display font-bold tracking-tight leading-none">
               <DistrictSelect value={selectedDistrict} onChange={handleDistrictChange} />
-            </div>
+            </h1>
           </div>
           <p className="text-neutral-500 text-sm mt-3 max-w-2xl">
             Power outage status board · feeders, affected areas &amp; restoration windows · refreshed every 5&nbsp;minutes
